@@ -5,10 +5,10 @@ class Blockchain:
     blockchian is a public ledger of transactions, store a list of blocks, which are sets of transactions.
     """
     def __init__(self):
-        self.chain = []
+        self.chain = [Block.genesis()]
 
     def addBlock(self, data):
-        self.chain.append(Block(data))
+        self.chain.append(Block.mineBlock(self.chain[-1], data))
 
     #repr method is a python buildin method to get pritnable string representation of an object.
     def __repr__(self):

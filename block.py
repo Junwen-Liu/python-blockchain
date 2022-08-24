@@ -1,21 +1,5 @@
 import time
-
-def mineBlock(last_block, data):
-    """
-    mine a block based on the given last_block and data
-    """
-    #time_ns count the nano seconds since Jan.1, 1970
-    timestamp = time.time_ns()
-    last_hash = last_block.hash
-    hash = f'{timestamp}-{last_hash}'
-
-    return Block(timestamp, last_hash, hash, data)
-
-def genesis():
-    """
-    Generate the genesis block
-    """
-    return Block(1, 'genesis_last_hash', 'genesis_hash', [])
+from crypto_hash import crypto_hash
 
 class Block:
     """
@@ -37,9 +21,27 @@ class Block:
             f'data:{self.data}, '
         )
 
+    @staticmethod
+    def mineBlock(last_block, data):
+        #mine a block based on the given last_block and data
+        #time_ns count the nano seconds since Jan.1, 1970
+        timestamp = time.time_ns()
+        last_hash = last_block.hash
+        hash = crypto_hash(data)
+
+        return Block(timestamp, last_hash, hash, data)
+
+    @staticmethod
+    def genesis():
+        """
+        Generate the genesis block
+        """
+        return Block(1, 'genesis_last_hash', 'genesis_hash', [])
+
 def main():
-    genesis_block = genesis()
-    block = mineBlock()
+    genesis_block = Block.genesis()
+    block = Block.mineBlock(genesis_block, 'foo')
+    print(block)
 
 if __name__ == '__main__':
     main()
