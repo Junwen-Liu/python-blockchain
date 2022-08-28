@@ -30,6 +30,9 @@ class Block:
             f'nounce:{self.nounce}'
         )
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
     @staticmethod
     def mineBlock(last_block, data):
         #mine a block based on the given last_block and data, until a block hash has been found

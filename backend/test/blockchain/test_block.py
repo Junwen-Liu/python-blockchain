@@ -1,4 +1,5 @@
 import time
+import pytest
 
 from backend.blockchain.block import Block
 from backend.util.arguments import GENESIS_DATA, MINE_RATE, SECOND
@@ -33,3 +34,32 @@ def test_slowly_mined_block():
     mine_block = Block.mineBlock(last_block, 'bar')
 
     assert mine_block.difficulty == last_block.difficulty -1
+
+@pytest.fixture
+def last_block():
+    return Block.genesis()
+
+@pytest.fixture
+def block(last_block):
+    return Block.mineBlock(last_block, 'testdata')
+
+def test_is_valid_block(last_block, block):
+    Block.is_valid_block(last_block, block)
+
+def test_is_valid_block_bad_last_hash(last_block, block):
+    block.last_hash = 'bad_hash'
+    with pytest.raises(Exception, match = 'last_hash must be correct'):
+        Block.is_valid_block(last_block, block)
+
+def test_is_valid_block_bad_proof_of_work(last_block, block):
+    block.hash = 'fff'
+    with pytest.raises(Exception, match = 'The proof of requirement was not met'):
+        Block.is_valid_block(last_block, block)
+
+def test_is_valid_block_jumped_difficulty(last_block, block):
+    jumped_difficulty = 10
+    block.difficulty = last_block.difficulty + jumped_difficulty
+    block.hash = f'{"0"*block.difficulty}111abc'
+
+    with pytest.raises(Exception, match='difficulty must only adjust by 1'):
+        Block.is_valid_block(last_block, block)
