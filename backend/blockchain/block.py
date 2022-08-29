@@ -21,7 +21,7 @@ class Block:
 
     def __repr__(self):
         return (
-            'Block'
+            'Block '
             f'timestamp:{self.timestamp}, '
             f'last_hash:{self.last_hash}, '
             f'hash:{self.hash}, '
