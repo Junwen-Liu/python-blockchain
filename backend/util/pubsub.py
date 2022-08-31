@@ -3,7 +3,7 @@ from backend.util.arguments import CHANNELS
 
 class PubSub:
     def __init__(self):
-        client = redis.Redis(host="123.60.55.61", port=6379,decode_responses=True)
+        self.client = redis.Redis(host="123.60.55.61", port=6379,decode_responses=True)
         
     def publish(self, env, data):
         self.client.publish(env, data)
@@ -21,8 +21,8 @@ def main():
     #print(r.get("name"))
 
     p = PubSub()
-    p.subscribe(CHANNELS.TEST)
-    p.publish(CHANNELS.TEST, 'this is something great')
+    p.subscribe(CHANNELS['TEST'])
+    p.publish(CHANNELS['TEST'], 'this is something great')
 
 
 if __name__ == '__main__':
